@@ -3,12 +3,13 @@
 
 {% block head %}
 {{super()}}
-<link rel="stylesheet" href="static/css/analytics.css">
+<link type="text/css" href="{{ url_for('static', filename='css/analytics.css') }}" rel="stylesheet" />
+<script src="{{ url_for('static', filename='js/case_control.js') }}"></script>
+<script src="{{ url_for('static', filename='js/adex_client.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.blockUI.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
 
-<script src="static/js/analytics.js"></script>
-<script src="static/js/adex_client.js"></script>
-<script src="static/js/jquery.blockUI.min.js"></script>
-<script src="static/js/Chart.min.js"></script>
+
 {% endblock %}
 
 {% block content %}
@@ -18,12 +19,18 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li class="active"><a href="/analytics">Population Overview</a></li>
-                <li><a href="/analytics/case">Case/Control</a></li>
+                <li><a href="/analytics">Case Control</a></li>
+                <li class="active"><a href="/analytics/case">Case/Control</a></li>
                 <li><a href="#">Export</a></li>
             </ul>
             <h5>Population Query</h5>
             <div class="nav nav-sidebar" id="population-criteria">
+                <div class="list-group">
+                </div>
+            </div>
+
+            <h5>Case Query</h5>
+            <div class="nav nav-sidebar" id="case-criteria">
                 <div class="list-group">
                 </div>
             </div>
@@ -33,7 +40,7 @@
             <!--</ul>-->
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h1 class="page-header">Population overview</h1>
+            <h1 class="page-header">Dashboard</h1>
 
             <div class="row placeholders">
                 <div class="col-md-3 placeholder">

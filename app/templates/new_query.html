@@ -3,39 +3,39 @@
 
 {% block head %}
 {{super()}}
-<script src="static/js/adex.js"></script>
+<script src="static/js/new_query.js"></script>
 {% endblock %}
 
 {% block content %}
 <div class="container">
-
-<!--
-    SELECT POPULATION
--->
-<div id="population2" class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Query construction</h3>
-    </div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Sex</div>
-                            <div class="panel-body">
-                                <div class="btn-group " id="population-sex-group">
-                                    <button type="button" class="btn btn-default">Male</button>
-                                    <button type="button" class="btn btn-default">Female</button>
-                                </div>
+    <!--
+        SELECT POPULATION
+    -->
+    <!--<div id="population2" class="panel panel-default">-->
+    <!--<div class="panel-heading">-->
+    <!--<h3 class="panel-title">Query construction</h3>-->
+    <!--</div>-->
+    <!--<div class="panel-body">-->
+    <h1 class="page-header">Construct a new query</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Sex</div>
+                        <div class="panel-body">
+                            <div class="btn-group " id="population-sex-group">
+                                <button type="button" class="btn btn-default">Male</button>
+                                <button type="button" class="btn btn-default">Female</button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-7">
-                        <div class="panel panel-default">
-                            <div id="drug-selection" class="panel-heading">Drugs</div>
-                            <div class="panel-body">
-                                <div class="input-group">
+                </div>
+                <div class="col-md-7">
+                    <div class="panel panel-default">
+                        <div id="drug-selection" class="panel-heading">Drugs</div>
+                        <div class="panel-body">
+                            <div class="input-group">
                                     <span class="input-group-btn">
                                         <button id="population-include-drug" data-toggle="tooltip"
                                                 data-placement="top" title="Include" class="btn btn-default"
@@ -43,7 +43,7 @@
                                             <i class="fa fa-plus-square"></i>
                                         </button>
                                     </span>
-                                    <input id="autocomplete-population-atc" type="text" class="form-control">
+                                <input id="autocomplete-population-atc" type="text" class="form-control">
                                     <span class="input-group-btn">
                                         <button id="population-exclude-drug" data-toggle="tooltip"
                                                 data-placement="top" title="Exclude" class="btn btn-default"
@@ -51,29 +51,29 @@
                                             <i class="fa fa-minus-square"></i>
                                         </button>
                                     </span>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Age</div>
-                            <div class="panel-body">
-                                <div class="layout-slider">
-                                    <input id="population-age-slider" type="text" name="population-area"
-                                           value="0;120"/>
-                                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Age</div>
+                        <div class="panel-body">
+                            <div class="layout-slider">
+                                <input id="population-age-slider" type="text" name="population-area"
+                                       value="0;120"/>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-7">
-                        <div class="panel panel-default">
-                            <div id="diagnosis-selection" class="panel-heading">Diagonses</div>
-                            <div class="panel-body">
-                                <div class="input-group">
+                <div class="col-md-7">
+                    <div class="panel panel-default">
+                        <div id="diagnosis-selection" class="panel-heading">Diagonses</div>
+                        <div class="panel-body">
+                            <div class="input-group">
                                     <span class="input-group-btn">
                                         <button id="population-include-diagnosis" data-toggle="tooltip"
                                                 data-placement="top" title="Include" class="btn btn-default"
@@ -81,7 +81,7 @@
                                             <i class="fa fa-plus-square"></i>
                                         </button>
                                     </span>
-                                    <input id="autocomplete-population-icd" type="text" class="form-control">
+                                <input id="autocomplete-population-icd" type="text" class="form-control">
                                     <span class="input-group-btn">
                                         <button id="population-exclude-diagnosis" data-toggle="tooltip"
                                                 data-placement="top" title="Exclude" class="btn btn-default"
@@ -89,108 +89,113 @@
                                             <i class="fa fa-minus-square"></i>
                                         </button>
                                     </span>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="population-criteria" class="panel panel-default">
-                    <div class="panel-heading">
-                        Population criteria
-                    </div>
-                    <div class="panel-body">
-                        <div class="list-group">
-                            <div class='list-group-item all-criterion'>
-                                <span class="label label-success all">All</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="case-criteria" class="panel panel-default">
-                    <div class="panel-heading">
-                        Case criteria
-                    </div>
-                    <div class="panel-body">
-                        <div class="list-group">
-                            <div class='list-group-item all-criterion'>
-                                <span class="label label-success">All</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="btn-group">
-                    <button id="analyze" type="button" class="btn btn-success">Analyze</button>
-                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Save query and analyze</a></li>
-                    </ul>
-
-                    <button type="button" class="btn btn-default">Save query</button>
-                </div>
-                <div class="btn-group">
-                    <button id="population-clear-criterion" type="button" class="btn btn-danger">Clear</button>
-                </div>
-
             </div>
-            <div id="sub-criterion" class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Sub-criterion</div>
-                    <div class="panel-body">
-                        <div class="list-group">
-                        </div>
-
-                        <div class="btn-group">
-                            <button type="button" id="add-sub-criteria" class="btn btn-success dropdown-toggle disabled" data-toggle="dropdown">
-                                Add <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li class=""><a href="#" id="population-add-sub-criteria">Population criteria</a></li>
-                                <li class=""><a href="#" id="case-add-sub-criteria">Case criteria</a></li>
-                                <!--<li class="divider"></li>-->
-                                <!--<li class=""><a href="#" id="both-add-sub-criteria">Both criteria</a></li>-->
-                            </ul>
-                            <!--<button  type="button" class="btn btn-success">Add</button>-->
-                            <button id="clear-sub-criterion" type="button" class="btn btn-default">Clear
-                            </button>
+            <div id="population-criteria" class="panel panel-default">
+                <div class="panel-heading">
+                    Population criteria
+                </div>
+                <div class="panel-body">
+                    <div class="list-group">
+                        <div class='list-group-item all-criterion'>
+                            <span class="label label-success all">All</span>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="panel panel-warning">
-                    <div class="panel-heading">
-                        Warning
-                    </div>
-                    <div class="panel-body">
-                        Case criteria and population criteria conflicts
+            <div id="case-criteria" class="panel panel-default">
+                <div class="panel-heading">
+                    Case criteria
+                </div>
+                <div class="panel-body">
+                    <div class="list-group">
+                        <div class='list-group-item all-criterion'>
+                            <span class="label label-success">All</span>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        Error
+            <div class="btn-group">
+                <button id="analyze" type="button" class="btn btn-success">Analyze</button>
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Save query and analyze</a></li>
+                </ul>
+
+                <button type="button" class="btn btn-default">Save query</button>
+            </div>
+            <div class="btn-group">
+                <button id="population-clear-criterion" type="button" class="btn btn-danger">Clear</button>
+            </div>
+
+        </div>
+        <div id="sub-criterion" class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">Sub-criterion</div>
+                <div class="panel-body">
+                    <div class="list-group">
                     </div>
-                    <div class="panel-body">
-                        Cannot contact the pill-server for the cookie-jar
+
+                    <div class="btn-group">
+                        <button type="button" id="add-sub-criteria" class="btn btn-success dropdown-toggle disabled"
+                                data-toggle="dropdown">
+                            Add <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class=""><a href="#" id="population-add-sub-criteria">Population criteria</a></li>
+                            <li class=""><a href="#" id="case-add-sub-criteria">Case criteria</a></li>
+                            <!--<li class="divider"></li>-->
+                            <!--<li class=""><a href="#" id="both-add-sub-criteria">Both criteria</a></li>-->
+                        </ul>
+                        <!--<button  type="button" class="btn btn-success">Add</button>-->
+                        <button id="clear-sub-criterion" type="button" class="btn btn-default">Clear
+                        </button>
                     </div>
+                </div>
+            </div>
+
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    Warning
+                </div>
+                <div class="panel-body">
+                    Case criteria and population criteria conflicts
+                </div>
+            </div>
+
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    Error
+                </div>
+                <div class="panel-body">
+                    Cannot contact the pill-server for the cookie-jar
                 </div>
             </div>
         </div>
+        <!--</div>-->
+        <!--</div>-->
     </div>
-</div>
-<div id="result" class="panel panel-default" style="display:none">
-    <div class="panel-heading">
-        JSON sent to server
-    </div>
-    <div class="panel-body">
-        <code><pre id="pop-result"> </pre></code>
+    <div id="result" class="panel panel-default" style="display:none">
+        <div class="panel-heading">
+            JSON sent to server
+        </div>
+        <div class="panel-body">
+            <code>
+                <pre id="pop-result"> </pre>
+            </code>
 
-        <code><pre id="case-result"></pre></code>
+            <code>
+                <pre id="case-result"></pre>
+            </code>
+        </div>
     </div>
-</div>
 </div>
 {% endblock %}

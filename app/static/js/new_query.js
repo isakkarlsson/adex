@@ -368,7 +368,7 @@ $(function() {
         $.ajax({
             url: "/api/1",
             type: 'post',
-            data: JSON.stringify(queries),
+            data: JSON.stringify({"population": queries, "case": caseQueries}),
 //            dataType: "json",
             contentType: "application/json"
 //            contentType: 'application/json',
@@ -409,7 +409,7 @@ $(function() {
         limits: false,
         step: 1,
         dimension: '',
-//        skin: "plastic",
+        skin: "round_plastic",
         callback: function(value) {
             populationEnableSubQueryAddReset();
             changePopulationAge(value)
@@ -506,38 +506,6 @@ $(function() {
         this.ICDs = [];
         this.ATCs = [];
     };
-
-    function populateAgeCriteria(dom, age, op, separator) {
-        separator = separator || "";
-        dom.append([
-               "<span class='label label-warning'>Age</span>",
-               op,
-               "<span class='label label-default'>" + age + "</span>",
-               separator
-        ].join("\n"))
-    }
-
-    function createSexCriteria(dom, sex, separator) {
-        separator = separator || "";
-        dom.append([
-            "<span class='label label-warning'>Sex</span> =",
-            "<span class='label label-default'>" + sex + "</span>",
-            separator
-        ].join("\n"))
-    }
-
-    function populateListCriteria(dom, list, label, op) {
-        list.forEach(function (element) {
-            console.log(list)
-            dom.append([
-                    "<span class='label label-warning'>" + label + "</span>",
-                    op,
-                    "<span class='label label-default'>" + element + "</span>",
-                    '<span class="label label-info conj">AND</span> '
-                ].join("\n"))
-        });
-    }
-
 
     function presentDisjunctiveCriterion(CriterionArray){
         var Result = "";

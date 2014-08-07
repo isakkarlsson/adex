@@ -29,9 +29,15 @@ def query_from_dict(d):
     q.exclude_drugs = d["exclude_drugs"]
     q.include_diags = d["include_diags"]
     q.exclude_diags = d["exclude_diags"]
-    q.min_age = d["min_age"] if "min_age" in d else None
-    q.max_age = d["max_age"] if "max_age" in d else None  # changed
-    q.gender = d["gender"].capitalize()[0] if "gender" in d else None
+    q.min_age = d["min_age"] if "min_age" in d else 0
+    q.max_age = d["max_age"] if "max_age" in d else 120  # changed
+    q.gender = d["gender"].lower() if "gender" in d else None
+    if q.gender == "male":
+        q.gender = "M"
+    if q.gender == "female":
+        q.gender = "K"
+    if q.gender == "other":
+        q.gender = "O"
 
     return q
 
@@ -107,6 +113,7 @@ class ADEFrame:
 
     def _initialize_counts(self):
         self.total_no_patients = len(self.patients)
+        self.gender_distribution = self.patients.drop("Age", 1).groupby("Gender").count()
         self.drug_distribution = self.drugs.reset_index() \
                                      .drop("Date", 1) \
                                      .groupby(["Code"]) \
@@ -429,9 +436,9 @@ def plot_time_series(drug_table, target):
         target.xs(drug).plot(color=cm.jet(i / 10., 1))
         i += 1
         names.append(drug)
-    plt.legend(names, loc="upper left", bbox_to_anchor=(1, 1))
-    plt.ylabel("Percent patients")
-    plt.xlabel("Delta")
+    # plt.legend(names, loc="upper left", bbox_to_anchor=(1, 1))
+    # plt.ylabel("Percent patients")
+    # plt.xlabel("Delta")
 
     return names
 

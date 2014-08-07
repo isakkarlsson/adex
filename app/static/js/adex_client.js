@@ -40,6 +40,12 @@ function AdexClient (endpoint) {
 		}	
 	}
 
+	this.socket.onopen = function(data) {
+	    if(self.on_open) {
+	        self.on_open(data)
+	    }
+	}
+
 	this.socket.onerror = function(data) {
 		if(self.on_error)
 			self.on_error(data)

@@ -18,6 +18,10 @@ def bank():
 def analytics():
     return render_template("analytics.html")
 
+@app.route('/analytics/case')
+def case_control():
+    return render_template("case_control.html")
+
 
 from flask import request
 from flask_restful import Resource
@@ -30,4 +34,5 @@ class RestfulQueryStore(Resource):
 
     def post(self, query_id):
         database[query_id] = request.get_json()
+        print database[query_id]
         return database[query_id]

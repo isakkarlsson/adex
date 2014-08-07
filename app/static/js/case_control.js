@@ -9,6 +9,7 @@ $(function() {
         $.getJSON("/api/1").success(function(data){
             console.log(data)
             render_query("#population-criteria", data.population)
+            render_query("#case-criteria", data.case)
 
             client.population_query(data.population)
         }).fail(function(e) {

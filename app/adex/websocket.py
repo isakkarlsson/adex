@@ -27,10 +27,10 @@ class NumpyInt64(json.JSONEncoder):
 
 def format_population_query_response(population):
     return {
-        'age_distribution': population.age_distribution.to_dict(),
+        'gender_distribution': population.gender_distribution.to_dict(),
+        'age_distribution': population.age_distribution.reset_index().to_dict("records"),
         'drug_distribution': population.drug_distribution.order(ascending=False).head(20).reset_index().to_dict("rows"),
-        'diagnos_distribution': population.diagnos_distribution.order(ascending=False).head(20).reset_index().to_dict(
-            "rows"),
+        'diagnos_distribution': population.diagnos_distribution.order(ascending=False).head(20).reset_index().to_dict("rows"),
         'total_no_patients': population.total_no_patients
     }
 
@@ -138,7 +138,6 @@ class AdexServerProtocol(WebSocketServerProtocol):
         logger.debug("Client connecting: %s" % request.peer)
 
     def onOpen(self):
-        print "hello world!"
         self.population = None
         self.last_query = None
         self.case = None
