@@ -423,9 +423,6 @@ def calculate_time_series(pair_counter, delta=10, normalize=None, step_size=1):
     return first.join(time_table[1:], how="outer").fillna(0)
 
 
-import matplotlib.cm as cm
-
-
 def plot_time_series(drug_table, target):
     """ Plot a series of drug found within `target`. In general, `target`
     is expected to be a time serie  """
