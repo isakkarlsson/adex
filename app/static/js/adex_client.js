@@ -29,6 +29,7 @@ function AdexClient (endpoint) {
 				case "population_split":
 					if(self.on_population_split)
 						self.on_population_split(data.args)
+                    break;
 				case "error":
 					if(self.on_error)
 						self.on_error(args)

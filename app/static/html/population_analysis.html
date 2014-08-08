@@ -1,0 +1,76 @@
+<!--<h1 class="page-header">Overview</h1>-->
+
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    Launch demo modal
+</button>
+
+<div class="row placeholders">
+    <div class="col-md-3 placeholder">
+        <h4>Gender distribution</h4>
+        <span class="text-muted">Shows the distribution of gender in the population</span>
+        <canvas id="population-sex-distribution"></canvas>
+    </div>
+    <div class="col-md-3 placeholder">
+        <h4>Age distribution</h4>
+        <span class="text-muted">Shows the age distribution in the population</span>
+        <canvas id="population-age-distribution"></canvas>
+    </div>
+    <div class="col-md-3 placeholder">
+        <h4>Drug distribution</h4>
+        <span class="text-muted">The top 10 most frequently prescribed drugs</span>
+        <canvas id="population-drug-distribution"></canvas>
+    </div>
+    <div class="col-md-3 placeholder">
+        <h4>Diagnosis distribution</h4>
+        <span class="text-muted">The top 10 most frequently assigned diagnoses</span>
+        <canvas id="population-diagnosis-distribution"></canvas>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-5">
+
+    </div>
+    <div class="col-md-7">
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2 class="sub-header">Drugs</h2>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>ATC</th>
+                    <th>Generic name</th>
+                    <th>Frequency</th>
+                    <th style="text-align: center" >Disproportionality</th>
+                </tr>
+                </thead>
+                <tbody id="drug-table" >
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h2 class="sub-header">Diagnoses</h2>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>ICD-10</th>
+                    <th>Diagnosis name</th>
+                    <th>Frequency</th>
+                    <th>Disproportionality</th>
+                </tr>
+                </thead>
+                <tbody id="diagnosis-table">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

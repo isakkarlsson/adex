@@ -29,8 +29,8 @@ def format_population_query_response(population):
     return {
         'gender_distribution': population.gender_distribution.to_dict(),
         'age_distribution': population.age_distribution.reset_index().to_dict("records"),
-        'drug_distribution': population.drug_distribution.order(ascending=False).head(20).reset_index().to_dict("rows"),
-        'diagnos_distribution': population.diagnos_distribution.order(ascending=False).head(20).reset_index().to_dict("rows"),
+        'drug_distribution': population.drug_distribution.order(ascending=False).reset_index().to_dict("rows"),
+        'diagnos_distribution': population.diagnos_distribution.order(ascending=False).reset_index().to_dict("rows"),
         'total_no_patients': population.total_no_patients
     }
 
@@ -116,7 +116,7 @@ class AdexServerProtocol(WebSocketServerProtocol):
             self.send_response("error", "no population set")
             return
         self.last_query = query
-        (self.case, self.control) = self.population.split([query])
+        (self.case, self.control) = self.population.split(query)
 
         return {
             "case": format_population_query_response(self.case),

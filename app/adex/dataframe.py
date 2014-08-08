@@ -92,8 +92,8 @@ class Query:
 
     def __eq__(self, other):
         return self.min_age == other.min_age and self.max_age == other.max_age and \
-               self.include_drugs == other.include_drugs and self.exclude_drugs == other.exclude_drugs and \
-               self.include_diags == other.include_diags and self.exclude_diags == other.exclude_diags
+            self.include_drugs == other.include_drugs and self.exclude_drugs == other.exclude_drugs and \
+            self.include_diags == other.include_diags and self.exclude_diags == other.exclude_diags
 
     def __repr__(self):
         return str(self)
@@ -106,9 +106,9 @@ class Query:
 
 class ADEFrame:
     def __init__(self, drugs, diagnoses, patients=None):
+        self.patients = patients
         self.drugs = drugs
         self.diagnoses = diagnoses
-        self.patients = patients
         self._initialize_counts()
 
     def _initialize_counts(self):
@@ -150,31 +150,37 @@ class ADEFrame:
         if not isinstance(queries, list):
             queries = [queries]
 
-        ids = self.__execute_query(queries)
+        ids = set(self.__execute_query(queries))
         all_drugs = set(self.drugs.index)
         all_diags = set(self.diagnoses.index)
+        all_patients = set(self.patients.index)
 
         drug_no = all_drugs - ids
         diag_no = all_diags - ids
-        if sample > 0 and len(drug_no) > sample:
+        patients_no = all_patients - ids
+
+        if 0 < sample < len(drug_no):
             drug_no = random.sample(drug_no, sample)
 
-        if sample > 0 and len(diag_no) > sample:
+        if 0 < sample < len(diag_no):
             diag_no = random.sample(diag_no, sample)
 
-        drug_no = list(self.__filter(drug_no, all_diags))
-        diag_no = list(self.__filter(diag_no, all_drugs))
+        # drug_no = set(self.__filter(drug_no, all_diags))
+        # diag_no = set(self.__filter(diag_no, all_drugs))
+        # patients_no = set(self.__filter())
 
-        yes_frame = ADEFrame(self.drugs.loc[self.__filter(ids, self.drugs.index)], \
-                             self.diagnoses.loc[self.__filter(ids, self.diagnoses.index)], \
-                             self.patients.loc[ids])
+        yes_frame = ADEFrame(self.drugs.loc[self.__filter(ids-drug_no, self.drugs.index)],
+                             self.diagnoses.loc[self.__filter(ids-diag_no, self.diagnoses.index)],
+                             self.patients.loc[ids - patients_no])
 
         if drug_no and diag_no:
-            no_frame = ADEFrame(self.drugs.loc[drug_no], self.diagnoses.loc[diag_no], self.patients.loc[diag_no])
+            no_frame = ADEFrame(self.drugs.loc[drug_no],
+                                self.diagnoses.loc[diag_no],
+                                self.patients.loc[patients_no])
         else:
             no_frame = ADEFrame(self.__empty(), self.__empty(), self.patients.loc[diag_no])
 
-        return (yes_frame, no_frame)
+        return yes_frame, no_frame
 
     def __empty(self, cols=["Code", "Patient", "Date"]):
         return pd.DataFrame(columns=cols)
@@ -318,16 +324,20 @@ def pairs(drug_index, drugs, diagnoses, patient_id, b_time, e_time, acc):
     if e_time < b_time:
         e_time, b_time = b_time, e_time
 
-    if not patient_id in drug_index: return
+    if not patient_id in drug_index:
+        return
+
     try:
         taken = drugs.xs(patient_id)[b_time:e_time]
     except:
-        print(patient_id, b_time, e_time)
         return
     seen = set()
     for took_time, drug in taken.dropna().iterrows():
-        if abs((took_time - b_time).days) < 1: continue
-        if drug["Code"] in seen: continue
+        if abs((took_time - b_time).days) < 1:
+            continue
+        if drug["Code"] in seen:
+            continue
+
         acc[drug["Code"]] += 1
         seen.add(drug["Code"])
 
@@ -338,7 +348,7 @@ def code_pairs(frame, code, delta=timedelta(days=-7), pad=timedelta(days=0)):
     drugs = frame.drugs.reset_index().set_index(["Patient", "Date"])
     selected_diagnosis = diagnoses[diagnoses.Code == code]
     if selected_diagnosis.empty:
-        return CodePairs(code, pd.DataFrame(columns=["Code", "Count"]).set_index("Code"))
+        return CodePairs(code, pd.DataFrame(columns=["Code", "Count"]).set_index("Code"), frame)
 
     patientids = set(selected_diagnosis.index.get_level_values(0))
     print(len(patientids))
@@ -348,7 +358,7 @@ def code_pairs(frame, code, delta=timedelta(days=-7), pad=timedelta(days=0)):
 
     for patient_id in patientids:
         if not patient_id in drug_index: continue
-        selected = selected_diagnosis.xs(patient_id).reset_index();
+        selected = selected_diagnosis.xs(patient_id).reset_index()
         if selected.empty: continue
         selected = selected.ix[random.randint(0, len(selected) - 1)]
         code = selected.ix[1]
@@ -368,24 +378,25 @@ def code_pairs(frame, code, delta=timedelta(days=-7), pad=timedelta(days=0)):
 def prr(a, b, c, d):
     """ proportional reporting ratio """
     if a <= 0 or c <= 0: return 0.0
-    return (a * (c + d)) / (c * (a + b));
+    return (a * (c + d)) / (c * (a + b))
 
 
 def disproportion(frame, a, x_count, y_count, method=prr):
     """ return the disproportionatness of a w.r.t x_count and y_count """
-    b = x_count - a;
-    c = y_count - a;
-    d = frame.total_no_patients - a - b - c;
+    b = x_count - a
+    c = y_count - a
+    d = frame.total_no_patients - a - b - c
     return method(float(a), float(b), float(c), float(d))
 
-
+# In [5]: pairs = code_pairs(frame, "Z510")
+# In [10]: disproportionality(frame, pairs).sort("Value", ascending=False)
 def disproportionality(frame, code_pairs, method=prr, min_a=5):
     """ get the disproporionality of `code` w.r.t. to every drug in pair"""
     code = code_pairs.code
     pairs = code_pairs.pairs
 
-    value = {};
-    a_value = {};
+    value = {}
+    a_value = {}
     x_count = frame.diagnos_distribution[code]
     for drug, count in pairs.iterrows():
         y_count = frame.drug_distribution[drug]
@@ -406,8 +417,8 @@ def time_serie(frame, code, delta=10, days=1, normalize=None):
 
 
 def calculate_time_series(pair_counter, delta=10, normalize=None, step_size=1):
-    start = -delta;
-    end = delta;
+    start = -delta
+    end = delta
     time_table = []
     print("Calculating time series")
     for i in range(start, end + 1, step_size):
@@ -426,18 +437,19 @@ def calculate_time_series(pair_counter, delta=10, normalize=None, step_size=1):
 def plot_time_series(drug_table, target):
     """ Plot a series of drug found within `target`. In general, `target`
     is expected to be a time serie  """
-    names = [];
-    i = 0
-    for drug, value in drug_table.iteritems():
-        if not drug in target.index: continue
-        target.xs(drug).plot(color=cm.jet(i / 10., 1))
-        i += 1
-        names.append(drug)
+    pass
+    # names = [];
+    # i = 0
+    # for drug, value in drug_table.iteritems():
+    #     if not drug in target.index: continue
+    #     target.xs(drug).plot(color=cm.jet(i / 10., 1))
+    #     i += 1
+    #     names.append(drug)
     # plt.legend(names, loc="upper left", bbox_to_anchor=(1, 1))
     # plt.ylabel("Percent patients")
     # plt.xlabel("Delta")
 
-    return names
+    # return names
 
 
 if __name__ == "__main__":

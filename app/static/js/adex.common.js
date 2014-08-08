@@ -145,21 +145,42 @@ function render_age_distribution(dom, data) {
 
 function render_gender_distribution(dom, data){
     var ctx = $(dom).get(0).getContext("2d");
-    var data = [
-        {
-            value: data.Gender.M,
-            label: "Male",
-            color:"#F7464A",
-            highlight: "#FF5A5E"
-        },
-        {
-            color: "#46BFBD",
-            highlight: "#5AD3D1",
-            value: data.Gender.K,
-            label: "Female"
-        }
-    ]
-    var gender = new Chart(ctx).Doughnut(data, {
+    var dataset = []
+
+    if(data.Gender.M !== undefined) {
+        dataset.push({ value: data.Gender.M,
+          label: "Male",
+          color:"#F7464A",
+          highlight: "#FF5A5E"
+        });
+    }
+
+    if(data.Gender.K !== undefined) {
+        dataset.push({ color: "#46BFBD",
+          highlight: "#5AD3D1",
+          value: data.Gender.K,
+          label: "Female"
+      });
+    }
+    var gender = new Chart(ctx).Doughnut(dataset, {
         animateScale: false
     });
+}
+
+function render_table(dom, data, total, modal, cls) {
+    var table = []
+    for(index in data) {
+        value = data[index]
+        table.push([
+            "<tr>",
+                "<td>" + value.Code + "</td>",
+                "<td>Not implemented yet.</td>",
+                "<td>" + (value.Patient / total).toFixed(4) + " (" + value.Patient +")</td>",
+                '<td style="text-align: center"><a href="#" data-toggle="modal" data-id="' + value.Code + '" data-target="' + modal + '" class="' + cls + '"><i class="fa fa-cogs"></i></a></td>',
+            "</tr>"
+        ].join("\n"))
+    }
+
+    $(table.join("\n")).appendTo(dom)
+
 }
