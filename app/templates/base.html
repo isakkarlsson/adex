@@ -77,7 +77,7 @@
                 {% endfor %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class=""><a href="#">Help</a></li>
+                <li {% if "help" == active_page %} class="active" {% endif %}><a href="/help">Help</a></li>
             </ul>
         </div>
     </div>

@@ -8,15 +8,11 @@ $(function() {
     $(document).on("click", ".open-disproportionality", function () {
          var id = $(this).data('id');
          console.log(id)
-//         $(".modal-body #bookId").val( myBookId );
-         // As pointed out in comments,
-         // it is superfluous to have to manually call the modal.
-         // $('#addBookDialog').modal('show');
     });
 
     var client = new AdexClient("ws://127.0.0.1:8080/ws")
     client.on_error = function(data) {
-        console.log(data)
+        errorBlock(data)
     }
 
     var populationQuery = undefined;
@@ -25,19 +21,19 @@ $(function() {
     $("#population-overview").click(function(evt) {
         $(evt.target).parent().toggleClass("active")
         $("#split-case-control").parent().toggleClass("active")
-        block()
+        loadingBlock()
         client.population_query(populationQuery)
     });
 
     $("#split-case-control").click(function(evt) {
         $(evt.target).parent().addClass("active")
         $("#population-overview").parent().removeClass("active")
-        block();
+        loadingBlock();
         client.population_split(caseQuery)
     });
 
     client.on_open = function(data) {
-        block()
+        loadingBlock()
         $.getJSON("/api/1").success(function(data){
             render_query("#population-criteria", data.population)
             populationQuery = data.population
@@ -82,16 +78,4 @@ $(function() {
             $.unblockUI()
         })
     };
-
-    function block() {
-        $.blockUI({
-            css: {
-                border: 'none',
-                padding: '15px',
-                backgroundColor: 'transparent',
-                color: "#fff"
-            },
-            message: '<i class="fa fa-cog fa-spin fa-5x"></i><p>Loading...</p>'
-        });
-    }
 });

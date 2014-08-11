@@ -182,5 +182,28 @@ function render_table(dom, data, total, modal, cls) {
     }
 
     $(table.join("\n")).appendTo(dom)
+}
 
+function loadingBlock() {
+    $.blockUI({
+        css: {
+            border: 'none',
+            padding: '15px',
+            backgroundColor: 'transparent',
+            color: "#fff"
+        },
+        message: '<i class="fa fa-cog fa-spin fa-5x"></i><p>Loading...</p>'
+    });
+}
+
+function errorBlock(msg) {
+     $.blockUI({
+            css: {
+                border: 'none',
+                padding: '15px',
+                backgroundColor: 'transparent',
+                color: "#fff"
+            },
+            message: '<i class="fa fa-exclamation-triangle fa-5x"></i><h5>An error occurred!</h5><p>' + msg + '</p>'
+        });
 }

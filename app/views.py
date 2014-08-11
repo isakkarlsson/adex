@@ -10,6 +10,10 @@ database = shelve.open("database.db")
 def index():
     return render_template("new_query.html")
 
+@app.route('/help')
+def help():
+    return render_template("help.html")
+
 @app.route('/bank')
 def bank():
     return render_template("bank.html")
