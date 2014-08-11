@@ -184,6 +184,9 @@ function render_table(dom, data, total, modal, cls) {
     $(table.join("\n")).appendTo(dom)
 }
 
+/*
+ * Display a loading screen
+ */
 function loadingBlock() {
     $.blockUI({
         css: {
