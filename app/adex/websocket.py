@@ -1,4 +1,4 @@
-from app.adex import dataframe
+from app.adex.query import query_from_dict
 
 import json
 import logging
@@ -88,7 +88,7 @@ class AdexServerProtocol(WebSocketServerProtocol):
             return "no population"
 
     def remote_population_query(self, query):
-        query = dataframe.query_from_dict(query)
+        query = query_from_dict(query)
         logger.info("population_query for %s" % query)
         if self.last_query and self.last_query == query:
             return self.remote_population_get()
@@ -99,7 +99,7 @@ class AdexServerProtocol(WebSocketServerProtocol):
 
     def remote_population_update(self, query):
         logger.info("population_update for %s" % query)
-        query = dataframe.query_from_dict(query)
+        query = query_from_dict(query)
         if self.last_query and self.last_query == query:
             return self.remote_population_get()
 
@@ -111,7 +111,7 @@ class AdexServerProtocol(WebSocketServerProtocol):
 
     def remote_population_split(self, query):
         logger.info("split_population %s" % self.request.peer)
-        query = dataframe.query_from_dict(query)
+        query = query_from_dict(query)
         if not self.population:
             self.send_response("error", "no population set")
             return
@@ -169,8 +169,7 @@ class AdexServerProtocol(WebSocketServerProtocol):
             logger.exception(e)
             self.sendMessage(json.dumps({"method": "error", "args": str(e)}).encode('utf8'))
 
-
-    def onClose(self, wasClean, code, reason):
+    def onClose(self, was_clean, code, reason):
         print("WebSocket connection closed: {}".format(reason))
 
 
