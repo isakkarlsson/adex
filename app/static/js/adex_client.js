@@ -28,7 +28,11 @@ function AdexClient (endpoint) {
 					break;
 				case "population_split":
 					if(self.on_population_split)
-						self.on_population_split(data.args)
+						self.on_population_split(args)
+                    break;
+                case "population_disp":
+                    if(self.on_population_disp)
+                        self.on_population_disp(args)
                     break;
 				case "error":
 					if(self.on_error)
@@ -74,6 +78,10 @@ function AdexClient (endpoint) {
 
 	this.population_split = function(query) {
 		this.remote_call("population_split", [query]);
+	}
+
+	this.population_disp = function(code) {
+	    this.remote_call("population_disp", [code])
 	}
  
 

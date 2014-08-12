@@ -184,6 +184,22 @@ function render_table(dom, data, total, modal, cls) {
     $(table.join("\n")).appendTo(dom)
 }
 
+function render_disp(dom, data) {
+    table = []
+    for(index in data) {
+        value = data[index]
+        table.push([
+            "<tr>",
+                "<td>" + value.Code + "</td>",
+                "<td>Not implemented yet.</td>",
+                "<td>" + value.Value.toFixed(4) + "</td>",
+            "</tr>"
+        ].join("\n"))
+    }
+
+    $(table.join("\n")).appendTo($(dom).html(""))
+}
+
 /*
  * Display a loading screen
  */
@@ -197,6 +213,22 @@ function loadingBlock() {
         },
         message: '<i class="fa fa-cog fa-spin fa-5x"></i><p>Loading...</p>'
     });
+}
+
+function loadingBlockComponent(dom) {
+    $(dom).block({
+        css: {
+          border: 'none',
+          padding: '15px',
+          backgroundColor: 'transparent',
+          color: "#fff"
+        },
+        message: '<i class="fa fa-cog fa-spin fa-5x"></i><p>Loading...</p>'
+    });
+}
+
+function loadingUnblockComponent(dom) {
+    $(dom).unblock();
 }
 
 function errorBlock(msg) {

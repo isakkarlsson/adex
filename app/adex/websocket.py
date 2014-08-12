@@ -1,3 +1,4 @@
+from app.adex import disp
 from app.adex.query import query_from_dict
 
 import json
@@ -115,7 +116,7 @@ class AdexServerProtocol(WebSocketServerProtocol):
         if not self.population:
             self.send_response("error", "no population set")
             return
-        self.last_query = query
+        # self.last_query = query
         (self.case, self.control) = self.population.split(query)
 
         return {
@@ -133,6 +134,16 @@ class AdexServerProtocol(WebSocketServerProtocol):
         self.case = None
         self.control = None
 
+    def remote_population_disp(self, code):
+        logger.info("calculating disp for %s" % code)
+        if not self.population:
+            self.send_response("error", "no population set")
+            return
+        pairs = disp.code_pairs(self.population, code)
+        d = pairs.disproportionality()
+        print d.to_dict()
+        return d.reset_index().to_dict("record")
+
     def onConnect(self, request):
         self.request = request
         logger.debug("Client connecting: %s" % request.peer)
@@ -144,7 +155,7 @@ class AdexServerProtocol(WebSocketServerProtocol):
         self.control = None
 
     def send_response(self, method, args=None, cls=None):
-        if args:
+        if args is not None:
             self.sendMessage(json.dumps({"method": method, "args": args}, cls=cls).encode('utf8'))
         else:
             self.sendMessage(json.dumps({"method": method}, cls=cls).encode('utf8'))

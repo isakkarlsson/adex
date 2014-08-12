@@ -5,10 +5,7 @@ $(function() {
         cache: false
     });
 
-    $(document).on("click", ".open-disproportionality", function () {
-         var id = $(this).data('id');
-         console.log(id)
-    });
+
 
     var client = new AdexClient("ws://127.0.0.1:8080/ws")
     client.on_error = function(data) {
@@ -17,6 +14,11 @@ $(function() {
 
     var populationQuery = undefined;
     var caseQuery = undefined;
+    var dispId = undefined;
+
+    $(document).on("click", ".open-disproportionality", function () {
+        dispId = $(this).data('id');
+    });
 
     $("#population-overview").click(function(evt) {
         $(evt.target).parent().toggleClass("active")
@@ -31,6 +33,18 @@ $(function() {
         loadingBlock();
         client.population_split(caseQuery)
     });
+
+    $("#calculate-disp").click(function(evt){
+        console.log(dispId)
+        loadingBlockComponent("#disp-modal");
+        client.population_disp(dispId);
+    });
+
+    client.on_population_disp = function(data) {
+        loadingUnblockComponent("#disp-modal");
+        render_disp("#disp-modal .table-responsive tbody", data)
+        loadingUnblockComponent("#disp-modal")
+    }
 
     client.on_open = function(data) {
         loadingBlock()
