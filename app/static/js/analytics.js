@@ -18,6 +18,8 @@ $(function() {
 
     $(document).on("click", ".open-disproportionality", function () {
         dispId = $(this).data('id');
+        $("#id-heading").text(dispId)
+        $("#disp-modal .table-responsive tbody").html("empty")
     });
 
     $("#population-overview").click(function(evt) {
