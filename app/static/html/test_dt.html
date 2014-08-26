@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Collapsible Tree Example</title>
+
+    <style>
+
+        .node circle {
+        fill: #fff;
+        stroke: steelblue;
+        stroke-width: 3px;
+        }
+
+        .node text { font: 12px sans-serif; }
+
+        .link {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 2px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<div id="canvas"></div>
+
+
+<!-- load the d3.js library -->
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="../js/jquery-1.7.1.js"></script>
+<script src="../js/render_tree.js"></script>
+
+
+<script>
+
+var treeData =
+{
+    "name": "petal length (cm) <= 2.4500",
+    "children": [
+        {
+            "name": "value = setosa",
+            "parent": "petal length (cm) <= 2.4500"
+        },
+        {
+            "name": "petal width (cm) <= 1.7500",
+            "parent": "petal length (cm) <= 2.4500",
+            "children": [
+                {
+                    "name": "petal length (cm) <= 4.9500",
+                    "parent": "petal width (cm) <= 1.7500",
+                    "children": [
+                        {
+                            "name": "petal width (cm) <= 1.6500",
+                            "parent": "petal length (cm) <= 4.9500",
+                            "children": [
+                                {
+                                    "name": "value = versicolor",
+                                    "parent": "petal width (cm) <= 1.6500"
+                                },
+                                {
+                                    "name": "value = virginica",
+                                    "parent": "petal width (cm) <= 1.6500"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "petal width (cm) <= 1.5500",
+                            "parent": "petal length (cm) <= 4.9500",
+                            "children": [
+                                {
+                                    "name": "value = virginica",
+                                    "parent": "petal width (cm) <= 1.5500"
+                                },
+                                {
+                                    "name": "petal length (cm) <= 5.4500",
+                                    "parent": "petal width (cm) <= 1.5500",
+                                    "children": [
+                                        {
+                                            "name": "value = versicolor",
+                                            "parent": "petal length (cm) <= 5.4500"
+                                        },
+                                        {
+                                            "name": "value = virginica",
+                                            "parent": "petal length (cm) <= 5.4500"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "petal length (cm) <= 4.8500",
+                    "parent": "petal width (cm) <= 1.7500",
+                    "children": [
+                        {
+                            "name": "sepal width (cm) <= 3.1000",
+                            "parent": "petal length (cm) <= 4.8500",
+                            "children": [
+                                {
+                                    "name": "value = virginica",
+                                    "parent": "sepal width (cm) <= 3.1000"
+                                },
+                                {
+                                    "name": "value = versicolor",
+                                    "parent": "sepal width (cm) <= 3.1000"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "value = virginica",
+                            "parent": "petal length (cm) <= 4.8500"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+};
+render_tree("#canvas", treeData);
+
+
+</script>
+</body>
+</html>
