@@ -1,13 +1,16 @@
 __author__ = 'isak'
-import collections, random
+import collections
+import random
 from datetime import timedelta
 
 import pandas as pd
+
 
 def prr(a, b, c, d):
     """ proportional reporting ratio """
     if a <= 0 or c <= 0: return 0.0
     return (a * (c + d)) / (c * (a + b))
+
 
 class CodePairs:
     def __init__(self, code, pairs, frame):
@@ -29,7 +32,8 @@ class CodePairs:
         for drug, count in pairs.iterrows():
             y_count = frame.drug_distribution[drug]
             a = count[0]
-            if a <= min_a: continue
+            if a <= min_a:
+                continue
             value[drug] = disproportion(frame, a, x_count, y_count, method=method)
             a_value[drug] = a  # add `a` to the dataframe
 
@@ -38,7 +42,7 @@ class CodePairs:
 
         value_table = pd.DataFrame(list(map(lambda v: (v[0], v[1], a_value[v[0]]), value.items())),
                                    columns=["Code", "Value", "Count"]).set_index("Code")
-        return value_table.sort("Value")
+        return value_table.sort("Value", ascending=False)
 
     def __repr__(self):
         return str(self)
@@ -101,9 +105,6 @@ def code_pairs(frame, code, delta=timedelta(days=-7), pad=timedelta(days=0)):
         return CodePairs(code, pd.DataFrame(lst, columns=["Code", "Count"]).set_index("Code"), frame)
     else:
         return CodePairs(code, pd.DataFrame(columns=["Code", "Count"]).set_index("Code"), frame)
-
-
-
 
 
 def disproportion(frame, a, x_count, y_count, method=prr):
