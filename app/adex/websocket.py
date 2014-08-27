@@ -6,7 +6,9 @@ import logging
 
 import sys
 import numpy as np
-# from autobahn.asyncio.websocket import WebSocketServerProtocol
+
+import dt
+
 from autobahn.twisted.websocket import WebSocketServerProtocol
 
 logger = logging.getLogger("adex")
@@ -47,13 +49,13 @@ import io
 
 
 class AdexServerProtocol(WebSocketServerProtocol):
-
     def __init__(self):
         print "Hello world!!"
         self.case = None
         self.control = None
         self.request = None
         self.last_query = None
+        self.last_case_query = None
         self.population = None
 
     def remote_build_dt(self):
@@ -63,23 +65,18 @@ class AdexServerProtocol(WebSocketServerProtocol):
             case.set_target(1)
             control = self.control.get_dataset(300)
             control.set_target(0)
-            dataset = case.merge(control);
-            dataset.drop_query(self.last_query)
+            dataset = case.merge(control)
+
+            print self.last_case_query
+            dataset.drop_query(self.last_case_query)
 
             values = dataset.values
 
-            X = values.drop("target", 1)
+            x = values.drop("target", 1)
             y = values.target
-
-            print(X.values)
-            print(y.values)
-
-            sb = io.StringIO()
-            dt = tree.DecisionTreeClassifier(max_depth=8)
-            mdl = dt.fit(X.values, y.values)
-
-            tree.export_graphviz(mdl, out_file=sb, feature_names=values.columns)
-            return {'dt': sb.getvalue()}
+            print y
+            mdl = dt.fit(x.values, y.values, max_depth=8, feature_names=values.columns, target_names=["Yes", "No"])
+            return {'dt': json.dumps(mdl)}
 
     def remote_population_get(self):
         logger.info("population_get for %s" % self.request.peer)
@@ -116,7 +113,8 @@ class AdexServerProtocol(WebSocketServerProtocol):
         if not self.population:
             self.send_response("error", "no population set")
             return
-        # self.last_query = query
+
+        self.last_case_query = query
         (self.case, self.control) = self.population.split(query)
 
         return {

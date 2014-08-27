@@ -5,7 +5,7 @@ import sklearn.tree._tree as _tree
 import numpy as np
 
 
-def fit(x, y, feature_names=None, target_names=None):
+def fit(x, y, max_depth=None, feature_names=None, target_names=None):
     def node_to_str(tree, node_id):
         value = tree.value[node_id]
         if tree.n_outputs == 1:
@@ -45,7 +45,7 @@ def fit(x, y, feature_names=None, target_names=None):
 
         return acc
 
-    decision_tree = tree.DecisionTreeClassifier(max_depth=10)
+    decision_tree = tree.DecisionTreeClassifier(max_depth=max_depth, min_samples_split=5)
     decision_tree.fit(x, y)
     t = decision_tree.tree_
     print t.children_left

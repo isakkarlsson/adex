@@ -151,10 +151,12 @@ class ADEFrame:
 
     def get_dataset(self, sample=500):
         if self.total_no_patients > sample:
-            idx = np.random.choice(self.patients.index, sample, replace=False)
-            c = pd.concat([self.diagnoses.ix[idx].reset_index().drop("Date", 1),
-                           self.drugs.ix[idx].reset_index().drop("Date", 1)])
-            j = pd.crosstab(c.Patient, c.Code)
+
+            idx = random.sample(self.patients.index, sample)
+            print idx
+            # idx = np.random.choice(self.patients.index, sample, replace=False)
+            c = pd.concat([self.diagnoses.ix[idx].reset_index().drop("Date", 1), self.drugs.ix[idx].reset_index().drop("Date", 1)])
+            j = pd.crosstab(c.index, c.Code)
             j["Age"] = self.patients.ix[idx].Age
             return Dataset(j)
         else:
@@ -162,7 +164,6 @@ class ADEFrame:
             j = pd.crosstab(c.Patient, c.Code)
             j["Age"] = self.patients.Age
             return Dataset(j)
-
 
     def __repr__(self):
         return str(self)

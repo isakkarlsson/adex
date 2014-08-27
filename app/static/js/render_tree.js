@@ -15,8 +15,8 @@ function render_tree(onElement, treeData) {
     var root;
 
     // size of the diagram
-    var viewerWidth = $(document).width();
-    var viewerHeight = $(document).height();
+    var viewerWidth = $(onElement).width();
+    var viewerHeight = 500;
 
     var tree = d3.layout.tree()
         .size([viewerHeight, viewerWidth]);
@@ -215,7 +215,7 @@ function render_tree(onElement, treeData) {
             .attr('class', 'nodeCircle')
             .attr("r", 0)
             .style("fill", function(d) {
-                return d._children ? "lightsteelblue" : "#fff";
+                return d._children || d.children ? "#fff" : "lightsteelblue";
             });
 
         nodeEnter.append("text")
@@ -239,7 +239,7 @@ function render_tree(onElement, treeData) {
         // Update the text to reflect whether node has children or not.
         node.select('text')
             .attr("y", function(d) {
-                return -10;
+                return -15;
             })
             .attr("text-anchor", function(d) {
                 return d.children || d._children ? "middle" : "middle";
@@ -252,7 +252,7 @@ function render_tree(onElement, treeData) {
         node.select("circle.nodeCircle")
             .attr("r", 4.5)
             .style("fill", function(d) {
-                return d._children ? "lightsteelblue" : "#fff";
+                return d._children ? "lightsteelblue" : "lightsteelblue";
             });
 
         // Transition nodes to their new position.

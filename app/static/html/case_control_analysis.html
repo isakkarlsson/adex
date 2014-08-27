@@ -1,8 +1,58 @@
 <!--<h1 class="page-header">Overview</h1>-->
+<button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Construct a decision tree</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="form-inline panel-body">
+                        <div class="input-group form-group">
+                            <select id="decision-tree-criterion" class="form-control">
+                                <option value="gini">Gini impurity</option>
+                                <option value="entropy">Entropy</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Max depth</span>
+                                <input id="decision-tree-depth" type="text" placeholder="Inf" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group btn-group">
+                            <button id="build-decision-tree" type="button" class="btn btn-default">
+                                Build decision tree
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Decicion tree for:
+                    </div>
+                    <div id="decision-tree-canvas" class="panel-body">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row placeholders">
     <div class="col-md-6" id="case">
         <h3 class="sub-header">Case group</h3>
+
         <div class="row">
             <div class="col-md-6 placeholder">
                 <h4>Gender distribution</h4>
@@ -30,6 +80,7 @@
     </div>
     <div class="col-md-6" id="control">
         <h3 class="sub-header">Control group</h3>
+
         <div class="row">
             <div class="col-md-6 placeholder">
                 <h4>Gender distribution</h4>

@@ -16,6 +16,19 @@ $(function() {
     var caseQuery = undefined;
     var dispId = undefined;
 
+    $(document).on("click", "#build-decision-tree", function() {
+        loadingBlock();
+        var criterion = $("#decision-tree-criterion").val();
+        var depth = $("#decision-tree-depth").val();
+        if(depth != undefined && depth != "") {
+            depth = parseInt(depth)
+        } else {
+            depth = undefined;
+        }
+        $("#decision-tree-canvas").html("")
+        client.build_dt()
+    });
+
     $(document).on("click", ".open-disproportionality", function () {
         dispId = $(this).data('id');
         $("#id-heading").text(dispId)
@@ -41,6 +54,13 @@ $(function() {
         loadingBlockComponent("#disp-modal");
         client.population_disp(dispId);
     });
+
+    client.on_build_dt = function(data) {
+        console.log(data)
+        var treeData = JSON.parse(data.dt);
+        render_tree("#decision-tree-canvas", treeData);
+        $.unblockUI();
+    }
 
     client.on_population_disp = function(data) {
         loadingUnblockComponent("#disp-modal");

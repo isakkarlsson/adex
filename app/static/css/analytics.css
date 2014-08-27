@@ -102,3 +102,19 @@ body {
 .placeholder canvas {
   margin-right: 20px;
 }
+
+.node circle {
+    fill: steelblue;
+    stroke: steelblue;
+    stroke-width: 3px;
+}
+
+.node text {
+    font: 12px sans-serif;
+}
+
+.link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
+}

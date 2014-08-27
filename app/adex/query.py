@@ -78,13 +78,14 @@ class Query:
 
     def __eq__(self, other):
         return self.min_age == other.min_age and self.max_age == other.max_age and \
-            self.include_drugs == other.include_drugs and self.exclude_drugs == other.exclude_drugs and \
-            self.include_diags == other.include_diags and self.exclude_diags == other.exclude_diags
+               self.include_drugs == other.include_drugs and self.exclude_drugs == other.exclude_drugs and \
+               self.include_diags == other.include_diags and self.exclude_diags == other.exclude_diags
 
     def __repr__(self):
         return str(self)
 
     def __str__(self):
         return "Query(includes(%s, %s), excludes=(%s, %s), %d < age < %d, gender=%s)" % \
-               (str(self.include_drugs), str(self.include_diags), str(self.exclude_drugs), str(self.exclude_diags), \
-                self.min_age, self.max_age, self.gender if self.gender else "both")
+               (str(self.include_drugs), str(self.include_diags), str(self.exclude_drugs), str(self.exclude_diags),
+                self.min_age if self.min_age else 0, self.max_age if self.max_age else 120,
+                self.gender if self.gender else "both")
