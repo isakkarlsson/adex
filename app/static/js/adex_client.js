@@ -30,6 +30,11 @@ function AdexClient (endpoint) {
 					if(self.on_population_split)
 						self.on_population_split(args)
                     break;
+                case "build_rf":
+                   if(self.on_build_rf){
+                        self.on_build_rf(args);
+                   }
+                   break;
                 case "population_disp":
                     if(self.on_population_disp)
                         self.on_population_disp(args)
@@ -63,6 +68,10 @@ function AdexClient (endpoint) {
 	this.build_dt = function() {
 		this.remote_call("build_dt")
 	}
+
+	this.build_rf = function() {
+        this.remote_call("build_rf")
+    }
 
 	this.population_query = function(query) {
 		this.remote_call("population_query", [query]);

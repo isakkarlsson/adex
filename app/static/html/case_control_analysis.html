@@ -1,14 +1,12 @@
 <!--<h1 class="page-header">Overview</h1>-->
-<button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button>
-
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+<div class="modal fade dt-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Construct a decision tree</h4>
+                <h4 class="modal-title" id="myModalLabel">Tree Visualization</h4>
             </div>
             <div class="modal-body">
                 <div class="panel panel-default">
@@ -27,14 +25,14 @@
                         </div>
                         <div class="form-group btn-group">
                             <button id="build-decision-tree" type="button" class="btn btn-default">
-                                Build decision tree
+                                Calculate Tree Visualization
                             </button>
                         </div>
                     </div>
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Decicion tree for:
+                        Tree Visualization
                     </div>
                     <div id="decision-tree-canvas" class="panel-body">
 
@@ -49,6 +47,57 @@
     </div>
 </div>
 
+<div class="modal fade rf-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="random-forest-title">Variable Importance</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="form-inline panel-body">
+                        <div class="input-group form-group">
+                            <select id="random-forest-criterion" class="form-control">
+                                <option value="gini">Gini impurity</option>
+                                <option value="entropy">Entropy</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">No. trees</span>
+                                <input id="random-forest-no-trees" type="text" placeholder="100" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group btn-group">
+                            <button id="build-random-forest" type="button" class="btn btn-default">
+                                Calculate variable importance
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Variable importance
+                    </div>
+                    <canvas id="random-forest-canvas" class="panel-body">
+
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="btn-toolbar" role="toolbar">
+    <div class="btn-group">
+        <button class="btn btn-primary" data-toggle="modal" data-target=".dt-modal"><i class="fa fa-tree"></i> Tree Visualization</button>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target=".rf-modal"><i class="fa fa-tree"></i> <i class="fa fa-tree"></i> Variable importance</button>
+        <button type="button" class="btn btn-default"><i class="fa fa-list"></i> Rule Visualization</button>
+    </div>
+</div>
 <div class="row placeholders">
     <div class="col-md-6" id="case">
         <h3 class="sub-header">Case group</h3>

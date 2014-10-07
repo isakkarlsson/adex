@@ -29,6 +29,21 @@ $(function() {
         client.build_dt()
     });
 
+    $(document).on("click", "#build-random-forest", function() {
+            loadingBlock();
+
+            console.log("calling build random forest")
+            var criterion = $("#random-forest-criterion").val();
+            var depth = $("#random-forest-no-trees").val();
+            if(depth != undefined && depth != "") {
+                depth = parseInt(depth)
+            } else {
+                depth = undefined;
+            }
+            $("#random-forest-canvas").html("")
+            client.build_rf()
+        });
+
     $(document).on("click", ".open-disproportionality", function () {
         dispId = $(this).data('id');
         $("#id-heading").text(dispId)
@@ -54,6 +69,14 @@ $(function() {
         loadingBlockComponent("#disp-modal");
         client.population_disp(dispId);
     });
+
+    client.on_build_rf = function(data) {
+        console.log(data)
+        var viData = JSON.parse(data.rf);
+        render_variable_importance("#random-forest-canvas", viData)
+        $.unblockUI();
+
+    }
 
     client.on_build_dt = function(data) {
         console.log(data)

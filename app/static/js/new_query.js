@@ -343,11 +343,11 @@ $(function() {
         }
 
         if(subCriteria.include_diags.length > 0) {
-            populateListCriteria(item, subCriteria.include_diags, "ATC", "=");
+            populateListCriteria(item, subCriteria.include_diags, "ICD", "=");
         }
 
         if(subCriteria.exclude_diags.length > 0) {
-            populateListCriteria(item, subCriteria.exclude_diags, "ATC", "≠")
+            populateListCriteria(item, subCriteria.exclude_diags, "ICD", "≠")
         }
 
         if(subCriteria.gender) {

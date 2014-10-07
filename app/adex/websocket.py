@@ -7,7 +7,7 @@ import logging
 import sys
 import numpy as np
 
-import dt
+import dt, rf
 
 from autobahn.twisted.websocket import WebSocketServerProtocol
 
@@ -77,6 +77,26 @@ class AdexServerProtocol(WebSocketServerProtocol):
             print y
             mdl = dt.fit(x.values, y.values, max_depth=8, feature_names=values.columns, target_names=["Yes", "No"])
             return {'dt': json.dumps(mdl)}
+
+    def remote_build_rf(self):
+        logger.info("building random forest")
+        if self.case and self.control:
+            case = self.case.get_dataset(300)
+            case.set_target(1)
+            control = self.control.get_dataset(300)
+            control.set_target(0)
+            dataset = case.merge(control)
+
+            print self.last_case_query
+            dataset.drop_query(self.last_case_query)
+
+            values = dataset.values
+
+            x = values.drop("target", 1)
+            y = values.target
+            print y
+            importance = rf.fit(x, y, feature_names=values.columns, target_names=["Yes", "No"])
+            return {'rf': json.dumps(importance)}
 
     def remote_population_get(self):
         logger.info("population_get for %s" % self.request.peer)

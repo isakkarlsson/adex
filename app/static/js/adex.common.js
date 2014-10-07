@@ -57,11 +57,11 @@ function render_query(selector, queries) {
         }
 
         if(query.include_diags.length > 0) {
-            populateListCriteria(item, query.include_diags, "ATC", "=");
+            populateListCriteria(item, query.include_diags, "ICD", "=");
         }
 
         if(query.exclude_diags.length > 0) {
-            populateListCriteria(item, query.exclude_diags, "ATC", "≠")
+            populateListCriteria(item, query.exclude_diags, "ICD", "≠")
         }
 
         if(query.gender) {
@@ -95,7 +95,8 @@ function render_distribution(dom, data) {
         ]
     }
     var myBarChart = new Chart(ctx).Bar(data, {
-     });
+
+    });
 }
 
 function render_age_distribution(dom, data) {
@@ -135,6 +136,39 @@ function render_age_distribution(dom, data) {
                 highlightStroke: "rgba(151,187,205,1)",
                 data: female
             }
+        ]
+    }
+    var myBarChart = new Chart(ctx).Bar(data, {
+        multiTooltipTemplate: "<%= obj.datasetLabel %>: <%= value %>"
+     });
+}
+
+function render_variable_importance(dom, data) {
+    console.log(data)
+    var ctx = $(dom).get(0).getContext("2d");
+    var labels = [], values = [];
+
+    var j = 0;
+    for(var i in data) {
+        if(j++ > 20)
+            break
+        value = data[i];
+        labels.push(value.name);
+        values.push(value.importance)
+    }
+    console.log(labels, values)
+    var data = {
+        labels: labels,
+        datasets: [
+            {
+                label: "Male",
+                fillColor: "rgba(220,220,220,0.5)",
+                strokeColor: "rgba(220,220,220,0.8)",
+                highlightFill: "rgba(220,220,220,0.75)",
+                highlightStroke: "rgba(220,220,220,1)",
+                data: values
+            },
+
         ]
     }
     var myBarChart = new Chart(ctx).Bar(data, {
