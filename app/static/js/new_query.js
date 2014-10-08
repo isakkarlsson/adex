@@ -149,6 +149,124 @@ $(function() {
         "A02AA10"
     ];
 
+
+    $.getJSON("/all/1").success(function(data){
+        gen_querylist(JSON.parse(data))
+    }).fail(function(e) {
+        console.log("Fail", e)
+    });
+
+//
+//var table = []
+//    for(index in data) {
+//        value = data[index]
+//        table.push([
+//            "<tr>",
+//                "<td>" + value.Code + "</td>",
+//                "<td>Not implemented yet.</td>",
+//                "<td>" + (value.Patient / total).toFixed(4) + " (" + value.Patient +")</td>",
+//                '<td style="text-align: center"><a href="#" data-toggle="modal" data-id="' + value.Code + '" data-target="' + modal + '" class="' + cls + '"><i class="fa fa-cogs"></i></a></td>',
+//            "</tr>"
+//        ].join("\n"))
+//    }
+
+//    $(table.join("\n")).appendTo(dom)
+    function gen_querylist(data) {
+        console.log(data)
+        data.sort(function(a, b) {
+            return parseInt(b.id) - parseInt(a.id)
+        })
+        var table = []
+        for(key in data) {
+            item = data[key];
+            table.push([
+                "<tr>",
+                    '<td class="text-center" id="' + item.id + 'population-criteria"></td>',
+                    '<td class="text-center" style="border-left: 1px solid #dddddd;" id="' + item.id + 'case-criteria"></div></td>',
+                    '<td class="text-center">' +
+                        '<a href="#" style="padding: 3px" data-toggle="tooltip" data-placement="top" title="Edit queries"><i class="fa fa-pencil-square-o default"></i></a>' +
+                        '<a href="#" style="padding: 3px" data-toggle="tooltip" data-placement="top" title="Remove query"><i class="fa fa-times red"></i></a>' +
+                        '<a href="/analytics?id=' + item.id + '" style="padding: 3px"  data-toggle="tooltip" data-placement="top" title="Analyze query"><i class="fa fa-arrow-right"></i></a>' +
+                    '</td>',
+                "</tr>"
+            ].join("\n"))
+            console.log(item.id)
+        }
+        $(table.join("\n")).prependTo("#my-queries")
+
+//        ordered.sort()
+//
+//        console.log(ordered)
+//        for(key in ordered) {
+//            key = ordered[key]+""
+//            item = data[key];
+//            table.push([
+//                "<tr>",
+//                    '<td class="text-center" id="' + item.id + 'population-criteria"></td>',
+//                    '<td class="text-center" style="border-left: 1px solid #dddddd;" id="' + item.id + 'case-criteria"></div></td>',
+//                    '<td class="text-center">' +
+//                        '<a href="#" style="padding: 3px" data-toggle="tooltip" data-placement="top" title="Edit queries"><i class="fa fa-pencil-square-o default"></i></a>' +
+//                        '<a href="#" style="padding: 3px" data-toggle="tooltip" data-placement="top" title="Remove query"><i class="fa fa-times red"></i></a>' +
+//                        '<a href="/analytics?id=' + item.id + '" style="padding: 3px"  data-toggle="tooltip" data-placement="top" title="Analyze query"><i class="fa fa-arrow-right"></i></a>' +
+//                    '</td>',
+//                "</tr>"
+//            ].join("\n"))
+//            console.log(key)
+//        }
+
+        for(key in data) {
+            item = data[key]
+            render_query("#" + item.id + 'population-criteria', item.query.population)
+            if(item.query.case !== undefined) {
+                render_query("#" + item.id + 'case-criteria', item.query.case)
+            }
+        }
+
+    }
+
+    function render_query(selector, queries) {
+        for(index in queries) {
+            var query = queries[index]
+            var item = $([
+                    '<div class="row">',
+                        '<div class="col-md-10">',
+                        '</div>',
+                        '<div class="col-md-2">',
+                            '<span class="label label-info">OR</span>',
+                        '</div>',
+                    '</div>'].join("\n")).appendTo(selector).find(".col-md-10");
+
+            if(query.min_age > 0)
+                populateAgeCriteria(item, query.min_age, '<i class="fa fa-angle-right"></i>', '<span class="label label-info conj">AND</span> ');
+            if(query.max_age < 120)
+                populateAgeCriteria(item, query.max_age, '<i class="fa fa-angle-left"></i>', '<span class="label label-info conj">AND</span> ');
+
+            if(query.include_drugs.length > 0) {
+                populateListCriteria(item, query.include_drugs, "ATC", "=");
+            }
+
+            if(query.exclude_drugs.length > 0) {
+                populateListCriteria(item, query.exclude_drugs, "ATC", "≠")
+            }
+
+            if(query.include_diags.length > 0) {
+                populateListCriteria(item, query.include_diags, "ICD", "=");
+            }
+
+            if(query.exclude_diags.length > 0) {
+                populateListCriteria(item, query.exclude_diags, "ICD", "≠")
+            }
+
+            if(query.gender) {
+                createSexCriteria(item, query.gender)
+            } else {
+                console.log(item.find(".conj").last())
+                item.find(".conj").last().remove();
+            }
+        }
+    }
+
+    $('[data-toggle="tooltip"]').tooltip({'placement': 'top'});
     $("#population-add-sub-criteria").toggleClass("disabled")
     $("#population-clear-sub-criterion").toggleClass("disabled")
 
@@ -274,12 +392,12 @@ $(function() {
         }
     }
 
-    $(window).bind('beforeunload', function(e){
-        if(queries.length > 0 || caseQueries.length > 0) {
-            return "You have unsaved changes."
-        }
-        e=null;
-    });
+//    $(window).bind('beforeunload', function(e){
+//        if(queries.length > 0 || caseQueries.length > 0) {
+//            return "You have unsaved changes."
+//        }
+//        e=null;
+//    });
 
     $("#population-include-diagnosis").click(function(evt) {
         populationEnableSubQueryAddReset();
@@ -359,11 +477,11 @@ $(function() {
         queries.push(subCriteria)
     }
 
-    $("#analyze").click(function(evt) {
-        $("#pop-result").html("").append(JSON.stringify(queries, undefined, 2));
-        $("#case-result").html("").append(JSON.stringify(caseQueries, undefined, 2));
-
-        $("#result").show();
+    $("#store-query").click(function(evt) {
+//        $("#pop-result").html("").append(JSON.stringify(queries, undefined, 2));
+//        $("#case-result").html("").append(JSON.stringify(caseQueries, undefined, 2));
+//
+//        $("#result").show();
 
         $.ajax({
             url: "/api/1",
@@ -373,9 +491,9 @@ $(function() {
             contentType: "application/json"
 //            contentType: 'application/json',
         }).done(function(e) {
-            console.log("success!")
+            location.reload();
         }).fail(function(e) {
-            console.log("fail!")
+            alert("failed")
         });
 
     });
@@ -424,8 +542,8 @@ $(function() {
     
     $( "#autocomplete-population-icd" ).keyup(function() {
         if($(this).val() != '') {
-	    $("#include-population-icd-button").prop('disabled',false).button('refresh');
-	    $("#exclude-population-icd-button").prop('disabled',false).button('refresh');
+            $("#include-population-icd-button").prop('disabled',false).button('refresh');
+            $("#exclude-population-icd-button").prop('disabled',false).button('refresh');
         }
     });
 
@@ -435,8 +553,8 @@ $(function() {
 
     $( "#autocomplete-population-atc" ).keyup(function() {
         if($(this).val() != '') {
-	    $("#include-population-atc-button").prop('disabled',false).button('refresh');
-	    $("#exclude-population-atc-button").prop('disabled',false).button('refresh');
+            $("#include-population-atc-button").prop('disabled',false).button('refresh');
+            $("#exclude-population-atc-button").prop('disabled',false).button('refresh');
         }
     });
 

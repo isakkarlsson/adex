@@ -5,6 +5,14 @@ $(function() {
         cache: false
     });
 
+    $.extend({
+        getUrl: function (name) {
+            return decodeURI(
+                (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+            )
+        }
+    });
+
 
 
     var client = new AdexClient("ws://127.0.0.1:8080/ws")
@@ -50,6 +58,12 @@ $(function() {
         $("#disp-modal .table-responsive tbody").html("empty")
     });
 
+    $(document).on("click", ".open-drug-disproportionality", function () {
+            dispId = $(this).data('id');
+            $("#drug-id-heading").text(dispId)
+            $("#drug-disp-modal .table-responsive tbody").html("empty")
+        });
+
     $("#population-overview").click(function(evt) {
         $(evt.target).parent().toggleClass("active")
         $("#split-case-control").parent().toggleClass("active")
@@ -68,6 +82,12 @@ $(function() {
         console.log(dispId)
         loadingBlockComponent("#disp-modal");
         client.population_disp(dispId);
+    });
+
+    $("#calculate-drug-disp").click(function(evt){
+        console.log(dispId)
+        loadingBlockComponent("#drug-disp-modal");
+        client.population_drug_disp(dispId);
     });
 
     client.on_build_rf = function(data) {
@@ -91,9 +111,17 @@ $(function() {
         loadingUnblockComponent("#disp-modal")
     }
 
+    client.on_population_drug_disp = function(data) {
+        loadingUnblockComponent("#drug-disp-modal");
+        render_disp("#drug-disp-modal .table-responsive tbody", data)
+        loadingUnblockComponent("#drug-disp-modal")
+    }
+
     client.on_open = function(data) {
         loadingBlock()
-        $.getJSON("/api/1").success(function(data){
+        var id = $.getUrl("id");
+        console.log(id)
+        $.getJSON("/api/" + id).success(function(data){
             render_query("#population-criteria", data.population)
             populationQuery = data.population
 
@@ -132,7 +160,7 @@ $(function() {
             render_distribution("#population-diagnosis-distribution", data.diagnos_distribution);
 
 
-            render_table("#drug-table", data.drug_distribution, data.total_no_patients, "#disp-modal", "open-disproportionality")
+            render_table("#drug-table", data.drug_distribution, data.total_no_patients, "#drug-disp-modal", "open-drug-disproportionality")
             render_table("#diagnosis-table", data.diagnos_distribution, data.total_no_patients, "#disp-modal", "open-disproportionality")
             $.unblockUI()
         })

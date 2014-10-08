@@ -239,6 +239,7 @@ function render_disp(dom, data) {
  */
 function loadingBlock() {
     $.blockUI({
+        baseZ: 21000,
         css: {
             border: 'none',
             padding: '15px',
@@ -251,6 +252,7 @@ function loadingBlock() {
 
 function loadingBlockComponent(dom) {
     $(dom).block({
+        baseZ: 21000,
         css: {
           border: 'none',
           padding: '15px',
@@ -267,6 +269,7 @@ function loadingUnblockComponent(dom) {
 
 function errorBlock(msg) {
      $.blockUI({
+            baseZ: 21000,
             css: {
                 border: 'none',
                 padding: '15px',

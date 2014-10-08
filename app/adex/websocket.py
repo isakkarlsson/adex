@@ -1,4 +1,4 @@
-from app.adex import disp
+from app.adex import diag_disp, drug_disp
 from app.adex.query import query_from_dict
 
 import json
@@ -157,7 +157,17 @@ class AdexServerProtocol(WebSocketServerProtocol):
         if not self.population:
             self.send_response("error", "no population set")
             return
-        pairs = disp.code_pairs(self.population, code)
+        pairs = diag_disp.code_pairs(self.population, code)
+        d = pairs.disproportionality()
+        print d.to_dict()
+        return d.reset_index().to_dict("record")
+
+    def remote_population_drug_disp(self, code):
+        logger.info("calculating drug_disp for %s" % code)
+        if not self.population:
+            self.send_response("error", "no population set")
+            return
+        pairs = drug_disp.code_pairs(self.population, code)
         d = pairs.disproportionality()
         print d.to_dict()
         return d.reset_index().to_dict("record")

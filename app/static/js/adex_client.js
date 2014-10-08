@@ -39,6 +39,10 @@ function AdexClient (endpoint) {
                     if(self.on_population_disp)
                         self.on_population_disp(args)
                     break;
+                case "population_drug_disp":
+                    if(self.on_population_drug_disp)
+                        self.on_population_drug_disp(args)
+                    break;
 				case "error":
 					if(self.on_error)
 						self.on_error(args)
@@ -93,6 +97,9 @@ function AdexClient (endpoint) {
 	    this.remote_call("population_disp", [code])
 	}
  
+    this.population_drug_disp = function(code) {
+	    this.remote_call("population_drug_disp", [code])
+	}
 
 	this.remote_call = function(func, args) {
 		if(args !== undefined)

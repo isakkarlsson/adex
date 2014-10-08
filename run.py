@@ -26,13 +26,14 @@ if __name__ == "__main__":
     from autobahn.twisted.websocket import WebSocketServerFactory
     from autobahn.twisted.resource import WebSocketResource, WSGIRootResource, HTTPChannelHixie76Aware
 
-    from app.views import RestfulQueryStore
+    from app.views import RestfulQueryStore, AllQueries
     from app.adex.websocket import server_protocol
 
     app.secret_key = str(uuid.uuid4())
 
     api = Api(app)
     api.add_resource(RestfulQueryStore, '/api/<string:query_id>')
+    api.add_resource(AllQueries, '/all/<string:id>')
 
     ws_factory = WebSocketServerFactory("ws://localhost:8080", debug=True)
     ws_factory.protocol = server_protocol(frame)
