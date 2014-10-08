@@ -59,10 +59,46 @@ $(function() {
     });
 
     $(document).on("click", ".open-drug-disproportionality", function () {
-            dispId = $(this).data('id');
-            $("#drug-id-heading").text(dispId)
-            $("#drug-disp-modal .table-responsive tbody").html("empty")
-        });
+        dispId = $(this).data('id');
+        $("#drug-id-heading").text(dispId)
+        $("#drug-disp-modal .table-responsive tbody").html("empty")
+    });
+
+    $("#drug-disp-filter").keyup(function (evt) {
+         var tr = $("#drug-disp-modal .table-responsive tbody tr").hide()
+         var q = this.value.trim();
+         if(q == "") {
+             tr.show();
+             return;
+         }
+
+         tr.filter(function(i, v) {
+             var t = $(this);
+             if (t.is(":contains('" + q + "')")) {
+                 return true;
+             } else {
+                 return false;
+             }
+         }).show();
+     });
+
+     $("#diag-disp-filter").keyup(function (evt) {
+              var tr = $("#disp-modal .table-responsive tbody tr").hide()
+              var q = this.value.trim();
+              if(q == "") {
+                  tr.show();
+                  return;
+              }
+
+              tr.filter(function(i, v) {
+                  var t = $(this);
+                  if (t.is(":contains('" + q + "')")) {
+                      return true;
+                  } else {
+                      return false;
+                  }
+              }).show();
+          });
 
     $(document).on("keyup", "#drug-filter", function (evt) {
         var tr = $("#drug-table tr").hide()

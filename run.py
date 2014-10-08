@@ -5,12 +5,12 @@ import uuid, sys
 # "/Volumes/SECURE USB/data/drugs.csv","/Volumes/SECURE USB/data/diagnoses.csv","/Volumes/SECURE USB/data/patients.csv"
 from app.adex.dataframe import ADEFrame, load_dataset
 
-frame = ADEFrame(*load_dataset("/Volumes/SECURE USB/data-small/drugs.csv",
-                               "/Volumes/SECURE USB/data-small/diagnoses.csv",
-                               "/Volumes/SECURE USB/data-small/patients.csv"))
-# frame = ADEFrame(*load_dataset("/Volumes/SECURE USB/data2/drugs.csv",
-#                                "/Volumes/SECURE USB/data2/diagnoses.csv",
-#                                "/Volumes/SECURE USB/data2/patients.csv"))
+# frame = ADEFrame(*load_dataset("/Volumes/SECURE USB/data-small/drugs.csv",
+#                                "/Volumes/SECURE USB/data-small/diagnoses.csv",
+#                                "/Volumes/SECURE USB/data-small/patients.csv"))
+frame = ADEFrame(*load_dataset("/Volumes/SECURE USB/data2/drugs.csv",
+                               "/Volumes/SECURE USB/data2/diagnoses.csv",
+                               "/Volumes/SECURE USB/data2/patients.csv"))
 
 # frame = None
 if __name__ == "__main__":
