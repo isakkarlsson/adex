@@ -64,6 +64,42 @@ $(function() {
             $("#drug-disp-modal .table-responsive tbody").html("empty")
         });
 
+    $(document).on("keyup", "#drug-filter", function (evt) {
+        var tr = $("#drug-table tr").hide()
+        var q = this.value.trim();
+        if(q == "") {
+            tr.show();
+            return;
+        }
+
+        tr.filter(function(i, v) {
+            var t = $(this);
+            if (t.is(":contains('" + q + "')")) {
+                return true;
+            } else {
+                return false;
+            }
+        }).show();
+    });
+
+    $(document).on("keyup", "#diagnosis-filter", function (evt) {
+        var tr = $("#diagnosis-table tr").hide()
+        var q = this.value.trim();
+        if(q == "") {
+            tr.show();
+            return;
+        }
+
+        tr.filter(function(i, v) {
+            var t = $(this);
+            if (t.is(":contains('" + q + "')")) {
+                return true;
+            } else {
+                return false;
+            }
+        }).show();
+    });
+
     $("#population-overview").click(function(evt) {
         $(evt.target).parent().toggleClass("active")
         $("#split-case-control").parent().toggleClass("active")
