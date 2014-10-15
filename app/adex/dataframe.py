@@ -38,7 +38,7 @@ class ADEFrame:
                                         .fillna(0).ix[:, 0]
 
         if not self.patients.empty:
-            bins = np.linspace(10, 100, 10)
+            bins = np.linspace(0, 100, 11)
             self.age_distribution = pd.crosstab(pd.cut(self.patients.Age, bins), \
                                                 self.patients.Gender, rownames=["Age"])
         else:
