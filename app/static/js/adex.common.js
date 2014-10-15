@@ -205,10 +205,11 @@ function render_table(dom, data, total, modal, cls) {
     var table = []
     for(index in data) {
         value = data[index]
+        var codeLength = value.Code.length
         table.push([
             "<tr>",
                 "<td>" + value.Code + "</td>",
-                "<td>Not implemented yet.</td>",
+                "<td>" + (codeLength <= 5 ? ICD10[value.Code] : ATC[value.Code]) + "</td>",
                 "<td>" + (value.Patient / total).toFixed(4) + " (" + value.Patient +")</td>",
                 '<td style="text-align: center"><a href="#" data-toggle="modal" data-id="' + value.Code + '" data-target="' + modal + '" class="' + cls + '"><i class="fa fa-cogs"></i></a></td>',
             "</tr>"
@@ -222,10 +223,11 @@ function render_disp(dom, data) {
     table = []
     for(index in data) {
         value = data[index]
+        var codeLength = value.Code.length
         table.push([
             "<tr>",
                 "<td>" + value.Code + "</td>",
-                "<td>Not implemented yet.</td>",
+                "<td>" + (codeLength <= 5 ? ICD10[value.Code] : ATC[value.Code]) + "</td>",
                 "<td>" + value.Value.toFixed(4) + "</td>",
             "</tr>"
         ].join("\n"))
